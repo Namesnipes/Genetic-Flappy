@@ -30,7 +30,6 @@ function gameLoop(time){
 
   if (dead) {
     reset()
-    score = 0;
   }
 
   //create new pipes
@@ -48,7 +47,7 @@ function gameLoop(time){
     if((pipes[i].x + 25) <= (canvas.width/2)  && !pipes[i].scoredOn){ //score
       score++
       pipes[i].scoredOn = true
-      console.log(score)
+      document.getElementById("score").innerText = score
     }
     if((pipes[i].x + 50) < 0){ //remove pipes
       Pipe.Rectangles.shift()
@@ -62,6 +61,8 @@ function gameLoop(time){
 }
 
 function reset(){
+  document.getElementById("score").innerText = "0"
+  score = 0;
   myBird = new Bird(canvas.width/2,canvas.height/2)
   dead = false
   Pipe.Rectangles = [];

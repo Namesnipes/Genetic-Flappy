@@ -3,3 +3,7 @@
   margin: auto;
   display: block;
 }
+
+#score{
+  text-align: center
+}
