@@ -1,9 +1,11 @@
 class Bird{
   static accel = 25
-  constructor(x,y){
+  static RADIUS = 10
+  constructor(x,y,brain){
+    this.brain = brain
     this.x = x
     this.y = y
-    this.radius = 10
+    this.radius = Bird.RADIUS
     this.yVel = 0
   }
 

@@ -2,6 +2,7 @@ class Pipe{
   static Rectangles = [];
   static movementSpeed = 100 // pixels / sec
   static PIPE_WIDTH = 50
+
   constructor(topPipeHeight,gapHeight,x){
     this.topPipeHeight = topPipeHeight
     this.gapHeight = gapHeight
@@ -16,6 +17,11 @@ class Pipe{
   draw(){
     this.topRect.draw()
     this.botRect.draw()
+  }
+
+  setColor(color){
+    this.topRect.setColor(color)
+    this.botRect.setColor(color)
   }
 
   step(dt){
