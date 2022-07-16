@@ -23,6 +23,25 @@ class Bird{
     this.x = newX
   }
 
+  shouldDie(pipe){
+    var collides = false
+    var rect = pipe.topRect
+    var rectX = rect.x + rect.width/2
+    var rectY = rect.y + rect.height/2
+    var rect2 = pipe.botRect
+    var rectX2 = rect2.x + rect2.width/2
+    var rectY2 = rect2.y + rect2.height/2
+    if(rectangleCircleIntersects(rectX,rectY,rect.width,rect.height,this.x,this.y,this.radius)){
+      collides = true
+    }
+    if(rectangleCircleIntersects(rectX2,rectY2,rect2.width,rect2.height,this.x,this.y,this.radius)){
+      collides = true
+    }
+    if((this.y + this.radius)  >= canvas.height) collides = true
+
+    return collides
+  }
+
   draw(){
     drawDot(this.x,this.y,this.radius,'red')
   }

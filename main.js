@@ -34,25 +34,12 @@ function gameLoop(time){
       Flock.birds.splice(bird,1)
       continue
     }
-
     if(thisBird.dead){
       thisBird.step(dt)
       continue
     }
 
-    var rect = nextPipe.topRect
-    var rectX = rect.x + rect.width/2
-    var rectY = rect.y + rect.height/2
-    var rect2 = nextPipe.botRect
-    var rectX2 = rect2.x + rect2.width/2
-    var rectY2 = rect2.y + rect2.height/2
-    if(rectangleCircleIntersects(rectX,rectY,rect.width,rect.height,thisBird.x,thisBird.y,thisBird.radius)){
-      dead = true
-    }
-    if(rectangleCircleIntersects(rectX2,rectY2,rect2.width,rect2.height,thisBird.x,thisBird.y,thisBird.radius)){
-      dead = true
-    }
-    if((thisBird.y + thisBird.radius)  >= canvas.height) dead = true
+    dead = thisBird.shouldDie(nextPipe)
 
     if(dead){
       thisBird.setDead(true)
@@ -62,9 +49,8 @@ function gameLoop(time){
       thisBird.step(dt)
     }
 
-    var xDiff = (nextPipeDistance - 200) / (0 - 200) // scale data [0,1] aprox., 1 means very close, 0 means very far
-    var yDiff = (Math.abs((nextPipe.topPipeHeight + PIPE_GAP_HEIGHT/2) - thisBird.y) - canvas.height/2/2) / (0 - canvas.height/2/2) // scale data [0,1] aprox., 1 means very close, 0 means very far
-    //console.log(xDiff,yDiff)
+    var xDiff = (nextPipeDistance - 200) / (0 - 200) // scale data [-1,1] aprox., 1 means very close, 0 means very far
+    var yDiff = ((nextPipe.topPipeHeight + PIPE_GAP_HEIGHT/2 - thisBird.y) - canvas.height/2/2) / (0 - canvas.height/2/2) // scale data [0,1] aprox., 1 means very close, 0 means very far
 
     thisBird.brain.setNetworkInputs(xDiff,yDiff)
     var output = thisBird.brain.getNetworkOutputs()
