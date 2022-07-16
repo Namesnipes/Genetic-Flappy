@@ -3,7 +3,9 @@ class Bird{
   static RADIUS = 10
   constructor(x,y,brain){
     this.brain = brain
+    this.fitness = 0
     this.dead = false
+    this.noDraw = false
     this.x = x
     this.y = y
     this.radius = Bird.RADIUS
@@ -23,6 +25,10 @@ class Bird{
     this.x = newX
   }
 
+  setFitness(fitness){
+    this.fitness = fitness
+  }
+
   shouldDie(pipe){
     var collides = false
     var rect = pipe.topRect
@@ -40,6 +46,21 @@ class Bird{
     if((this.y + this.radius)  >= canvas.height) collides = true
 
     return collides
+  }
+
+  distanceToPipe(pipe){
+    var x1 = this.x
+    var y1 = this.y
+
+    var x2 = (pipe.x + Pipe.PIPE_WIDTH)
+    var y2 = pipe.topPipeHeight + PIPE_GAP_HEIGHT/2
+
+    var a = x2 - x1
+    var b = y2 - y1
+
+    var c = Math.sqrt(a**2 + b**2)
+
+    return c
   }
 
   draw(){

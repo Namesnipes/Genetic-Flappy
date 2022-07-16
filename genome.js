@@ -32,7 +32,6 @@ class Genome{
       this.genome[structure.length-1].push(new Node(structure.length-1,i))
     }
 
-    console.log(structure)
   }
 
   connect(){ // create all the connections / weights
@@ -48,7 +47,6 @@ class Genome{
         toNode.setConnections(currentConnections)
       }
     }
-    console.log(this.genome)
   }
 
   getNetworkOutputs(){ //aka feedforward
