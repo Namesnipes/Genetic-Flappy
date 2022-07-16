@@ -18,14 +18,17 @@ class Node{
 
   getOutput(){
     if(this.layer == 0) return;
+
     var output = 0
     for(var i = 0; i < this.connections.length; i++){
       output += this.connections[i].weight * this.connections[i].from.output
+      //console.log(this.number, this.connections[i],"*", this.connections[i].from.output)
     }
     output += this.bias
-    //Z1 = W1*In1 + W2*In2 + W3*In3 + W4*In4 + W5*In5 + Bias_Neuron1
+    //Output = W1*In1 + W2*In2 + W3*In3 + W4*In4 + W5*In5 + Bias_Neuron1
     var activation = this.sigmoid(output)
     this.output = activation
+    return activation
   }
   setInput(input){
     this.input = input

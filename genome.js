@@ -42,7 +42,7 @@ class Genome{
         var toNode = this.genome[layerNum][nodeNum]
         for(var prevNodeNum = 0; prevNodeNum < this.genome[layerNum-1].length; prevNodeNum++){
           var fromNode = this.genome[layerNum-1][prevNodeNum]
-          var weight = random_normal(); // make random
+          var weight = Math.random()-0.5//random_normal(); // make random
           currentConnections.push(new connectionNode(fromNode,toNode,weight))
         }
         toNode.setConnections(currentConnections)
@@ -51,20 +51,40 @@ class Genome{
     console.log(this.genome)
   }
 
-  feedforward(){
+  getNetworkOutputs(){ //aka feedforward
+    //console.log(this.genome[1][0].connections)
+    //console.log(this.genome[1][0].getOutput())
+    var finalOutputs = []
     for(var layerNum = 0; layerNum < this.genome.length; layerNum++){
       for(var nodeNum = 0; nodeNum < this.genome[layerNum].length; nodeNum++) {
         var out = this.genome[layerNum][nodeNum].getOutput()
+        //console.log(out)
+        if(layerNum === (this.genome.length-1)){
+          finalOutputs.push(out)
+        }
       }
     }
-    console.log(this.genome)
+    return finalOutputs
+  }
+
+  setNetworkInputs(){
+    var inputs = arguments //this is epic wow thanks stackoverflow
+    for(var i = 0; i < this.genome[0].length; i++){
+      this.genome[0][i].setOutput(inputs[i])
+    }
   }
 
   debugPrint(){
     var str = ""
     for(var i = 0; i < this.genome.length; i++){
+      if(i > 0){
+        for(var k = 0; k < this.genome[i][0].connections.length; k++){
+          str += "|" + this.genome[i][0].connections[k].weight + "|"
+        }
+        str += "\n"
+      }
       for(var j = 0; j < this.genome[i].length; j++){
-        str += "()"
+        str += "(" + this.genome[i][j].output + ")"
       }
       str += "\n"
     }
