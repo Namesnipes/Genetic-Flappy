@@ -4,9 +4,14 @@
 </head>
 
 <body>
-  <h1 id="score">0</h1>
-  <canvas id="game" width="800" height="800"> </canvas>
-  <p id="info"> You are the yellow bird, click to jump </p>
+  <div id="gameWrapper">
+    <div id="stats">
+      <h2 class="desc">Score: <span id="score">0</span></h2>
+      <h2 class="desc">Generation: <span id="gen">0</span></h2>
+    </div>
+    <canvas id="game" width="800" height="800"> </canvas>
+    <p id="info"> You are the yellow bird, click to jump </p>
+  </div>
 </body>
 
 <script src="helper.js"></script defer>

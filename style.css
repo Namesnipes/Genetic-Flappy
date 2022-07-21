@@ -11,3 +11,18 @@
 #info{
   text-align: center
 }
+
+#gameWrapper{
+  position:relative;
+  margin-top: 50px;
+}
+#stats{
+  position:absolute;
+  display:block;
+  width: 400px;
+  height: 400px;
+}
+.desc{
+  display:block;
+  text-align:center;
+}

@@ -158,6 +158,7 @@ function reset() {
   nextPipeDistance = (pipes[0].x + Pipe.PIPE_WIDTH) - (flock.birds[0] - Bird.RADIUS / 2)
   score = 0;
 
+  document.getElementById("gen").innerText = Number(document.getElementById("gen").innerText) + 1
   window.requestAnimationFrame(gameLoop)
 }
 
