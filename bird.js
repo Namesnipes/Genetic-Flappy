@@ -1,8 +1,8 @@
 class Bird{
   static accel = 25
   static RADIUS = 10
-  constructor(x,y,brain,color,visual){
-    this.visualAid = visual
+  constructor(x,y,brain,color,notNeural){
+    this.notNeural = notNeural
     this.brain = brain
     this.fitness = 0
     this.dead = false
@@ -28,7 +28,7 @@ class Bird{
   }
 
   setFitness(fitness){
-    if(this.visualAid) this.fitness = 0;
+    if(this.notNeural) this.fitness = 0;
     else this.fitness = fitness
   }
 

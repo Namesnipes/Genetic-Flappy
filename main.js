@@ -12,6 +12,10 @@ var brain = new Genome([
 
 var flock = new Flock(POP_TOTAL)
 
+
+var myBird = new Bird(canvas.width/2,canvas.height/2,null,"yellow",true)
+flock.addBird(myBird)
+
 var pipes = [new Pipe(300, PIPE_GAP_HEIGHT, 800)]
 var nextPipe = pipes[0]
 var nextPipeDistance = (pipes[0].x + Pipe.PIPE_WIDTH) - (flock.birds[0] - Bird.RADIUS / 2)
@@ -63,10 +67,12 @@ function gameLoop(time) {
         var xDiff = (nextPipeDistance - 200) / (0 - 200) // scale data [-1,1] aprox., 1 means very close, 0 means very far
         var yDiff = ((nextPipe.topPipeHeight + PIPE_GAP_HEIGHT / 2 - thisBird.y) - canvas.height / 2 / 2) / (0 - canvas.height / 2 / 2) // scale data [0,1] aprox., 1 means very close, 0 means very far
 
-        thisBird.brain.setNetworkInputs(xDiff, yDiff)
-        var output = thisBird.brain.getNetworkOutputs()
-        if (output >= 0.5) {
-            thisBird.jump()
+        if(!thisBird.notNeural){
+          thisBird.brain.setNetworkInputs(xDiff, yDiff)
+          var output = thisBird.brain.getNetworkOutputs()
+          if (output >= 0.5) {
+              thisBird.jump()
+          }
         }
     }
 
@@ -136,6 +142,8 @@ function reset() {
   for(var i = 0; i < BIRDS_SURVIVE; i++){
     flock.addBird(new Bird(canvas.width/2,canvas.height/2,rankedBirds[i].brain.clone(),rankedBirds[i].color))
   }
+  var myBird = new Bird(canvas.width/2,canvas.height/2,null,"yellow",true)
+  flock.addBird(myBird)
   //var testBird = new Bird(canvas.width/2,canvas.height/2,rankedBirds[0].brain.clone(),"yellow",true)
   //testBird.brain.mutate()
   //flock.addBird(testBird)
@@ -157,8 +165,5 @@ function reset() {
 window.requestAnimationFrame(gameLoop)
 
 document.getElementById("game").addEventListener('click', function(e) {
-    for (bird in flock.birds) {
-        var thisBird = flock.birds[bird]
-        thisBird.jump()
-    }
+  myBird.jump()
 })
