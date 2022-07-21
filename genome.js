@@ -44,7 +44,7 @@ class Genome{
           var fromNode = this.genome[layerNum-1][prevNodeNum]
           var weight;
           if(weights) weight = weights[layerNum][nodeNum].inConnections[prevNodeNum].weight
-          else weight = Math.random()-0.5//random_normal(); // make random
+          else weight = Math.random()*2-1//random_normal(); // make random
           var connectingNode = new connectionNode(fromNode,toNode,weight)
           fromNode.addOutConnections(connectingNode)
           currentConnections.push(connectingNode)
