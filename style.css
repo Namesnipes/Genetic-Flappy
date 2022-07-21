@@ -15,9 +15,12 @@
 #gameWrapper{
   position:relative;
   margin-top: 50px;
+  width:1500px;
 }
 #stats{
   position:absolute;
+  right:0px;
+  top: 0px;
   display:block;
   width: 400px;
   height: 400px;
