@@ -9,7 +9,8 @@ class Node{
     this.bias = 0;
     this.input = null
     this.output = null
-    this.connections = null
+    this.inConnections = []
+    this.outConnections = []
   }
 
   sigmoid(x){
@@ -20,8 +21,8 @@ class Node{
     if(this.layer == 0) return;
 
     var output = 0
-    for(var i = 0; i < this.connections.length; i++){
-      output += this.connections[i].weight * this.connections[i].from.output
+    for(var i = 0; i < this.inConnections.length; i++){
+      output += this.inConnections[i].weight * this.inConnections[i].from.output
       //console.log(this.number, this.connections[i],"*", this.connections[i].from.output)
     }
     output += this.bias
@@ -36,8 +37,16 @@ class Node{
   setOutput(output){
     this.output = output
   }
-  setConnections(connections){
-    this.connections = connections
+  setInConnections(connections){
+    this.inConnections = connections
+  }
+
+  addOutConnections(connections){
+    this.outConnections.push(connections)
+  }
+
+  setOutConnections(connections){
+    this.outConnections = connections
   }
 
 }

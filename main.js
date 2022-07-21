@@ -1,5 +1,8 @@
 var SPACE_BETWEEN_PIPES = 400
-var PIPE_GAP_HEIGHT = 150
+var PIPE_GAP_HEIGHT = 140
+var POP_TOTAL = 100
+var BIRDS_SURVIVE = 5
+var TEST_BIRDS = 0
 
 var brain = new Genome([
     [1, 1],
@@ -7,7 +10,7 @@ var brain = new Genome([
     [1]
 ])
 
-var flock = new Flock(1000)
+var flock = new Flock(POP_TOTAL)
 
 var pipes = [new Pipe(300, PIPE_GAP_HEIGHT, 800)]
 var nextPipe = pipes[0]
@@ -46,7 +49,6 @@ function gameLoop(time) {
         dead = thisBird.shouldDie(nextPipe)
 
         if (dead) {
-            console.log(thisBird.fitness)
             thisBird.setDead(true)
             thisBird.step(dt)
             continue
@@ -120,8 +122,29 @@ function gameLoop(time) {
 }
 
 function reset() {
-  console.log('r')
-  flock = new Flock(1000)
+  var rankedBirds = flock.birds
+  rankedBirds.sort((a, b) => (a.fitness > b.fitness) ? -1 : 1)
+
+  var babies = []
+  for(var i = 0; i < POP_TOTAL-BIRDS_SURVIVE-TEST_BIRDS; i++){
+    var parent1 = flock.pickAParent()
+    var parent2 = flock.pickAParent()
+    babies.push(parent1.haveSex(parent2))
+  }
+
+  flock = new Flock(POP_TOTAL-BIRDS_SURVIVE-TEST_BIRDS,babies)
+  for(var i = 0; i < BIRDS_SURVIVE; i++){
+    flock.addBird(new Bird(canvas.width/2,canvas.height/2,rankedBirds[i].brain.clone(),rankedBirds[i].color))
+  }
+  //var testBird = new Bird(canvas.width/2,canvas.height/2,rankedBirds[0].brain.clone(),"yellow",true)
+  //testBird.brain.mutate()
+  //flock.addBird(testBird)
+
+  console.log(rankedBirds[0].fitness)
+  console.log(flock.birds)
+
+
+
   pipes = [new Pipe(300, PIPE_GAP_HEIGHT, 800)]
   nextPipe = pipes[0]
   nextPipeDistance = (pipes[0].x + Pipe.PIPE_WIDTH) - (flock.birds[0] - Bird.RADIUS / 2)

@@ -1,11 +1,13 @@
 class Bird{
   static accel = 25
   static RADIUS = 10
-  constructor(x,y,brain){
+  constructor(x,y,brain,color,visual){
+    this.visualAid = visual
     this.brain = brain
     this.fitness = 0
     this.dead = false
     this.noDraw = false
+    this.color = color
     this.x = x
     this.y = y
     this.radius = Bird.RADIUS
@@ -26,7 +28,8 @@ class Bird{
   }
 
   setFitness(fitness){
-    this.fitness = fitness
+    if(this.visualAid) this.fitness = 0;
+    else this.fitness = fitness
   }
 
   shouldDie(pipe){
@@ -63,8 +66,15 @@ class Bird{
     return c
   }
 
+  haveSex(parent){
+    var babyBrain = this.brain.crossover(parent.brain)
+    babyBrain.mutate()
+    var baby = new Bird(canvas.width/2,canvas.height/2,babyBrain,this.color)
+    return baby
+  }
+
   draw(){
-    drawDot(this.x,this.y,this.radius,'red')
+    drawDot(this.x,this.y,this.radius,this.color)
   }
 
   step(msTime){

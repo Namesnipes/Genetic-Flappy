@@ -3,6 +3,7 @@
 
 //https://towardsdatascience.com/using-genetic-algorithms-to-train-neural-networks-b5ffe0d51321
 class Genome{
+  static MUTATION_RATE = 0.3
   constructor(structure){ //[ [1,1], [1,1,1,1], [1,1,1,1], [1]]
     this.layers = structure.length
     this.inputs = structure[0].length
@@ -34,17 +35,21 @@ class Genome{
 
   }
 
-  connect(){ // create all the connections / weights
+  connect(weights){ // create all the connections / weights
     for(var layerNum = 1; layerNum < this.genome.length; layerNum++){
       for(var nodeNum = 0; nodeNum < this.genome[layerNum].length; nodeNum++) {
         var currentConnections = []
         var toNode = this.genome[layerNum][nodeNum]
         for(var prevNodeNum = 0; prevNodeNum < this.genome[layerNum-1].length; prevNodeNum++){
           var fromNode = this.genome[layerNum-1][prevNodeNum]
-          var weight = Math.random()-0.5//random_normal(); // make random
-          currentConnections.push(new connectionNode(fromNode,toNode,weight))
+          var weight;
+          if(weights) weight = weights[layerNum][nodeNum].inConnections[prevNodeNum].weight
+          else weight = Math.random()-0.5//random_normal(); // make random
+          var connectingNode = new connectionNode(fromNode,toNode,weight)
+          fromNode.addOutConnections(connectingNode)
+          currentConnections.push(connectingNode)
         }
-        toNode.setConnections(currentConnections)
+        toNode.setInConnections(currentConnections)
       }
     }
   }
@@ -72,12 +77,68 @@ class Genome{
     }
   }
 
+
+  //Swaps all weights of a random neuron with brain2
+  crossover(brain2){
+    var hiddenLayers = this.layers-2
+
+    var randomLayer = getRandomInt(0,hiddenLayers-1)+1
+    var numberOfNodes = this.genome[randomLayer].length;
+
+    var randomNode = getRandomInt(0,numberOfNodes-1)
+
+    var node1 = this.genome[randomLayer][randomNode]
+    var node2 = brain2.genome[randomLayer][randomNode]
+
+
+    var babyBrain = this.clone()
+    for(var i = 0; i < babyBrain.genome[randomLayer][randomNode].inConnections.length; i++){
+      babyBrain.genome[randomLayer][randomNode].inConnections[i].weight = node2.inConnections[i].weight
+    }
+    for(var i = 0; i < babyBrain.genome[randomLayer][randomNode].outConnections.length; i++){
+      babyBrain.genome[randomLayer][randomNode].outConnections[i].weight = node2.outConnections[i].weight
+    }
+
+    return babyBrain
+  }
+
+  mutate(){
+    if(Math.random() < Genome.MUTATION_RATE){
+      console.log('mutate')
+      var multiplier = randInRange(0.5,1.5)
+      var randomLayer = getRandomInt(0,this.layers-1)
+      var numberOfNodes = this.genome[randomLayer].length;
+
+      var randomNode = getRandomInt(0,numberOfNodes-1)
+      var node = this.genome[randomLayer][randomNode]
+      var weight;
+      if(node.layer === 0){
+        node["outConnections"][getRandomInt(0,this.genome[1].length-1)].weight *= multiplier
+      } else if(node.layer === this.layers-1){
+        node["inConnections"][getRandomInt(0,this.genome[this.layers-2].length-1)].weight *= multiplier
+      } else {
+        node["inConnections"][getRandomInt(0,this.genome[randomLayer-1].length-1)].weight *= multiplier
+        node["outConnections"][getRandomInt(0,this.genome[randomLayer+1].length-1)].weight *= multiplier
+      }
+    } else {
+
+    }
+
+  }
+
+  clone(){
+    var g = new Genome(this.genome)
+    g.connect(this.genome)
+
+    return g
+  }
+
   debugPrint(){
     var str = ""
     for(var i = 0; i < this.genome.length; i++){
       if(i > 0){
-        for(var k = 0; k < this.genome[i][0].connections.length; k++){
-          str += "|" + this.genome[i][0].connections[k].weight + "|"
+        for(var k = 0; k < this.genome[i][0].inConnections.length; k++){
+          str += "|" + this.genome[i][0].inConnections[k].weight + "|"
         }
         str += "\n"
       }

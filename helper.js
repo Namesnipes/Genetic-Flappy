@@ -1,10 +1,10 @@
 var canvas = document.getElementById("game")
 var context = canvas.getContext("2d");
 
-function drawDot(x,y,radius,color='black'){
+function drawDot(x,y,radius,color){
   context.beginPath();
   context.arc(x, y, radius, 0, 2 * Math.PI);
-  context.fillStyle = color
+  context.fillStyle = color || "rgba(255, 0, 0, 0.1)"
   context.fill()
   context.stroke();
 }
@@ -34,6 +34,12 @@ function rectangleCircleIntersects(rX,rY,rW,rH,cX,cY,cR){ // coordinates are fro
 
 function randInRange(min,max){
   return Math.random() * (max - min) + min
+}
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function random_normal() {
