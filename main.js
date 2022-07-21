@@ -142,7 +142,7 @@ function reset() {
   for(var i = 0; i < BIRDS_SURVIVE; i++){
     flock.addBird(new Bird(canvas.width/2,canvas.height/2,rankedBirds[i].brain.clone(),rankedBirds[i].color))
   }
-  var myBird = new Bird(canvas.width/2,canvas.height/2,null,"yellow",true)
+  myBird = new Bird(canvas.width/2,canvas.height/2,null,"yellow",true)
   flock.addBird(myBird)
   //var testBird = new Bird(canvas.width/2,canvas.height/2,rankedBirds[0].brain.clone(),"yellow",true)
   //testBird.brain.mutate()
