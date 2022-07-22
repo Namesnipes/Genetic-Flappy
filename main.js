@@ -166,6 +166,9 @@ function reset() {
   }
 
   flock = new Flock(POP_TOTAL-BIRDS_SURVIVE-TEST_BIRDS,babies)
+  for(var i = 0; i < BIRDS_SURVIVE; i++){
+    flock.addBird(new Bird(canvas.width/2,canvas.height/2,rankedBirds[i].brain.clone(),rankedBirds[i].color))
+  }
   myBird = new Bird(canvas.width/2,canvas.height/2,null,"yellow",true,false)
   console.log(myBird.noDraw)
   flock.addBird(myBird)
