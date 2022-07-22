@@ -4,6 +4,9 @@ var POP_TOTAL = 100
 var BIRDS_SURVIVE = 5
 var TEST_BIRDS = 0
 
+var fitnessHistory = []
+var fitnessAvg = 0;
+
 var brain = new Genome([
     [1, 1],
     [1, 1, 1, 1, 1, 1],
@@ -158,14 +161,13 @@ function reset() {
 
   var fitnessSum = 0;
   for(var i = 0; i < flock.birds.length; i++){
-    fitnessSum += flock.birds[i].fitness
+    fitnessSum +=  flock.birds[i].fitness
+
   }
 
   flock = new Flock(POP_TOTAL-BIRDS_SURVIVE-TEST_BIRDS,babies)
-  for(var i = 0; i < BIRDS_SURVIVE; i++){
-    flock.addBird(new Bird(canvas.width/2,canvas.height/2,rankedBirds[i].brain.clone(),rankedBirds[i].color))
-  }
-  myBird = new Bird(canvas.width/2,canvas.height/2,null,"yellow",true)
+  myBird = new Bird(canvas.width/2,canvas.height/2,null,"yellow",true,false)
+  console.log(myBird.noDraw)
   flock.addBird(myBird)
   //var testBird = new Bird(canvas.width/2,canvas.height/2,rankedBirds[0].brain.clone(),"yellow",true)
   //testBird.brain.mutate()
@@ -181,10 +183,17 @@ function reset() {
   nextPipeDistance = (pipes[0].x + Pipe.PIPE_WIDTH) - (flock.birds[0] - Bird.RADIUS / 2)
   score = 0;
 
+  fitnessHistory.push(Math.round(fitnessSum))
+  var tempSum = 0;
+  for(var i = fitnessHistory.length-1; i > fitnessHistory.length-10 && i >= 0; i--){
+    tempSum +=  fitnessHistory[i]
+  }
+  fitnessAvg = tempSum/10;
+
+  document.getElementById("fit").innerText = fitnessAvg
   document.getElementById("gen").innerText = Number(document.getElementById("gen").innerText) + 1
   xValues.push(Number(document.getElementById("gen").innerText))
-  yValues.push(fitnessSum)
-  console.log(xValues,yValues)
+  yValues.push(Math.round(fitnessSum))
   myChart.update()
 
   window.requestAnimationFrame(gameLoop)
@@ -192,6 +201,14 @@ function reset() {
 
 
 window.requestAnimationFrame(gameLoop)
+
+document.getElementById("invisCheck").addEventListener("change", function(e){
+  if (event.currentTarget.checked) {
+    flock.changeNoDraw(true)
+  } else {
+    flock.changeNoDraw(false)
+  }
+})
 
 document.getElementById("game").addEventListener('click', function(e) {
   myBird.jump()

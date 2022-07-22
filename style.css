@@ -13,8 +13,7 @@
 #info{
   text-align: center;
   margin:0 auto;
-  position:absolute;
-  bottom:0px;
+  position:relative;
   margin-bottom: 20px;
   width:100%;
 }
@@ -31,7 +30,7 @@
   float:right;
   top: 0px;
   width: 400px;
-  height: 400px;
+  height: 500px;
   border-style: solid;
 }
 
@@ -39,6 +38,18 @@
   position:relative;
   margin:0 auto;
   width:100%
+}
+
+#checkbox1{
+  top:10px;
+  width:100%;
+  position: relative;
+  text-align:left;
+}
+
+.checkbox{
+  position:relative;
+  bottom:0px;
 }
 
 .desc{

@@ -1,12 +1,12 @@
 class Bird{
   static accel = 25
   static RADIUS = 10
-  constructor(x,y,brain,color,notNeural){
+  constructor(x,y,brain,color,notNeural,noDraw=Flock.noDraw){
     this.notNeural = notNeural
     this.brain = brain
     this.fitness = 0
     this.dead = false
-    this.noDraw = false
+    this.noDraw = noDraw
     this.color = color
     this.x = x
     this.y = y
