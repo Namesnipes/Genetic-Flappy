@@ -1,19 +1,23 @@
 <html>
 <head>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
 
 <body>
   <div id="gameWrapper">
     <canvas id="game" width="800" height="800"> </canvas>
-    <p id="info"> You are the yellow bird, click to jump </p>
     <div id="stats">
       <h2 class="desc">Score: <span id="score">0</span></h2>
       <h2 class="desc">Generation: <span id="gen">0</span></h2>
+      <canvas id="chart"></canvas>
+      <p id="info"> You are the yellow bird, click to jump </p>
+
     </div>
   </div>
 </body>
 
+<script src="chartMaker.js"></script>
 <script src="helper.js"></script defer>
 <script src="rectangle.js"></script defer>
 <script src="pipe.js"></script defer>

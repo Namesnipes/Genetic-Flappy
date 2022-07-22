@@ -3,7 +3,8 @@
 
 //https://towardsdatascience.com/using-genetic-algorithms-to-train-neural-networks-b5ffe0d51321
 class Genome{
-  static MUTATION_RATE = 0.3
+  static MUTATION_RATE = 0.4
+  static BRAIN_STRUCTURE = [[1,1,1,1], [1,1,1,1,1,1], [1]]
   constructor(structure){ //[ [1,1], [1,1,1,1], [1,1,1,1], [1]]
     this.layers = structure.length
     this.inputs = structure[0].length
@@ -104,7 +105,7 @@ class Genome{
 
   mutate(){
     if(Math.random() < Genome.MUTATION_RATE){
-      console.log('mutate')
+      var addition = randInRange(-0.5,0.5)
       var multiplier = randInRange(0.5,1.5)
       var randomLayer = getRandomInt(0,this.layers-1)
       var numberOfNodes = this.genome[randomLayer].length;
@@ -113,12 +114,12 @@ class Genome{
       var node = this.genome[randomLayer][randomNode]
       var weight;
       if(node.layer === 0){
-        node["outConnections"][getRandomInt(0,this.genome[1].length-1)].weight *= multiplier
+        node["outConnections"][getRandomInt(0,this.genome[1].length-1)].weight += addition
       } else if(node.layer === this.layers-1){
-        node["inConnections"][getRandomInt(0,this.genome[this.layers-2].length-1)].weight *= multiplier
+        node["inConnections"][getRandomInt(0,this.genome[this.layers-2].length-1)].weight += addition
       } else {
-        node["inConnections"][getRandomInt(0,this.genome[randomLayer-1].length-1)].weight *= multiplier
-        node["outConnections"][getRandomInt(0,this.genome[randomLayer+1].length-1)].weight *= multiplier
+        node["inConnections"][getRandomInt(0,this.genome[randomLayer-1].length-1)].weight += addition
+        node["outConnections"][getRandomInt(0,this.genome[randomLayer+1].length-1)].weight += addition
       }
     } else {
 

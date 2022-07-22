@@ -19,6 +19,10 @@ flock.addBird(myBird)
 var pipes = [new Pipe(300, PIPE_GAP_HEIGHT, 800)]
 var nextPipe = pipes[0]
 var nextPipeDistance = (pipes[0].x + Pipe.PIPE_WIDTH) - (flock.birds[0] - Bird.RADIUS / 2)
+
+var nextNextPipe;
+var nextNextPipeDistance;
+
 var score = 0;
 
 
@@ -34,6 +38,10 @@ function gameLoop(time) {
     }
     dt = time - last;
     last = time
+    if(document.hidden){
+      window.requestAnimationFrame(gameLoop)
+      return
+    }
 
     //compute collisions and neural netwok output for each bird
     var allDead = true
@@ -66,9 +74,11 @@ function gameLoop(time) {
 
         var xDiff = (nextPipeDistance - 200) / (0 - 200) // scale data [-1,1] aprox., 1 means very close, 0 means very far
         var yDiff = ((nextPipe.topPipeHeight + PIPE_GAP_HEIGHT / 2 - thisBird.y) - canvas.height / 2 / 2) / (0 - canvas.height / 2 / 2) // scale data [0,1] aprox., 1 means very close, 0 means very far
-
+        var yDiff2 = 0
+        var yVel = (thisBird.yVel - 0) / (8 - 0) // 1 is fast down, -1 is fast up
+        if(nextNextPipe) yDiff2 = ((nextNextPipe.topPipeHeight + PIPE_GAP_HEIGHT / 2 - thisBird.y) - canvas.height / 2 / 2) / (0 - canvas.height / 2 / 2)
         if(!thisBird.notNeural){
-          thisBird.brain.setNetworkInputs(xDiff, yDiff)
+          thisBird.brain.setNetworkInputs(xDiff, yDiff, yDiff2, yVel)
           var output = thisBird.brain.getNetworkOutputs()
           if (output >= 0.5) {
               thisBird.jump()
@@ -100,7 +110,13 @@ function gameLoop(time) {
         if ((distFromBird > 0) && (distFromBird < smallestDistance)) {
             smallestDistance = distFromBird
             nextPipe = pipes[i]
+            nextNextPipe = pipes[i+1]
+
             nextPipeDistance = distFromBird
+            if(nextNextPipe){
+              var distFromBird2 = (pipes[i+1].x + Pipe.PIPE_WIDTH) - (canvas.width / 2 - Bird.RADIUS / 2)
+              nextNextPipeDistance = distFromBird2
+            }
         }
 
         if ((pipes[i].x + Pipe.PIPE_WIDTH) < 0) { //remove pipes
@@ -109,11 +125,13 @@ function gameLoop(time) {
             pipes.splice(i, 1)
         }
     }
-
     //drawing time
     nextPipe.setColor("red")
+    if(nextNextPipe){
+      nextNextPipe.setColor("yellow")
+    }
     for (var i = 0; i < pipes.length; i++) {
-        if (pipes[i] != nextPipe) pipes[i].setColor("black")
+        if (pipes[i] != nextPipe && pipes[i] != nextNextPipe) pipes[i].setColor("black")
         pipes[i].draw(dt)
     }
     for (bird in flock.birds) {
@@ -138,6 +156,11 @@ function reset() {
     babies.push(parent1.haveSex(parent2))
   }
 
+  var fitnessSum = 0;
+  for(var i = 0; i < flock.birds.length; i++){
+    fitnessSum += flock.birds[i].fitness
+  }
+
   flock = new Flock(POP_TOTAL-BIRDS_SURVIVE-TEST_BIRDS,babies)
   for(var i = 0; i < BIRDS_SURVIVE; i++){
     flock.addBird(new Bird(canvas.width/2,canvas.height/2,rankedBirds[i].brain.clone(),rankedBirds[i].color))
@@ -159,6 +182,11 @@ function reset() {
   score = 0;
 
   document.getElementById("gen").innerText = Number(document.getElementById("gen").innerText) + 1
+  xValues.push(Number(document.getElementById("gen").innerText))
+  yValues.push(fitnessSum)
+  console.log(xValues,yValues)
+  myChart.update()
+
   window.requestAnimationFrame(gameLoop)
 }
 
