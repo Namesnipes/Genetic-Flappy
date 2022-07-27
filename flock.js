@@ -1,6 +1,7 @@
 class Flock{
   static noDraw = false;
   static Colors = ["rgba(255, 0, 0, 1)","rgba(0, 0, 255, 1)","rgba(0, 255, 0, 1)","rgba(0, 0, 0, 1)"]
+  static STEP_SPEED=1
   constructor(population,premadePopulation){
     if(!premadePopulation){
       this.birds = []

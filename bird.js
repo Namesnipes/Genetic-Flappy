@@ -1,5 +1,5 @@
 class Bird{
-  static accel = 25
+  static accel = 1600
   static RADIUS = 10
   constructor(x,y,brain,color,notNeural,noDraw=Flock.noDraw){
     this.notNeural = notNeural
@@ -78,10 +78,10 @@ class Bird{
   }
 
   step(msTime){
-    var secTime = msTime/1000
+    var secTime = (msTime/1000)*Flock.STEP_SPEED
     if(!this.dead){
       var newVelocity = this.yVel + Bird.accel * secTime
-      var deltaY = this.yVel + 1/2 * Bird.accel * secTime ** 2
+      var deltaY = this.yVel * secTime + 1/2 * Bird.accel * secTime ** 2
       this.setY(this.y + deltaY)
       this.yVel = newVelocity
     } else {
@@ -91,7 +91,7 @@ class Bird{
   }
 
   jump(){
-    if(!this.dead){this.yVel = -8} else { console.log("what")}
+    if(!this.dead){this.yVel = -450} else { console.log("what")}
   }
 
 

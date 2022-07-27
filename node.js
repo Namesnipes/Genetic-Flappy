@@ -6,7 +6,9 @@ class Node{
     this.layer = layer
     this.number = number
 
-    this.bias = 0;
+    if(layer === 0) this.bias = 0;
+    else this.bias = Math.random()*2-1;
+
     this.input = null
     this.output = null
     this.inConnections = []
@@ -36,6 +38,9 @@ class Node{
   }
   setOutput(output){
     this.output = output
+  }
+  setBias(bias){
+    this.bias = bias;
   }
   setInConnections(connections){
     this.inConnections = connections

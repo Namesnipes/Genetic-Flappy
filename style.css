@@ -30,7 +30,7 @@
   float:right;
   top: 0px;
   width: 400px;
-  height: 500px;
+  height: 600px;
   border-style: solid;
 }
 
@@ -45,6 +45,11 @@
   width:100%;
   position: relative;
   text-align:left;
+}
+
+.subStats{
+  margin-top:15px;
+  margin: 5px;
 }
 
 .checkbox{

@@ -42,6 +42,11 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function fixRoundingError(num, decimals){
+  var factor = Math.pow(10, decimals);
+  return Math.round(num*factor)/factor;
+}
+
 function random_normal() {
   let u = 0, v = 0;
   while(u === 0) u = Math.random(); //Converting [0,1) to (0,1)

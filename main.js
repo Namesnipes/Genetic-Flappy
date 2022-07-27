@@ -22,12 +22,13 @@ flock.addBird(myBird)
 var pipes = [new Pipe(300, PIPE_GAP_HEIGHT, 800)]
 var nextPipe = pipes[0]
 var nextPipeDistance = (pipes[0].x + Pipe.PIPE_WIDTH) - (flock.birds[0] - Bird.RADIUS / 2)
-
 var nextNextPipe;
 var nextNextPipeDistance;
+var thirdNextPipe;
+var thirdNextPipeDistance;
 
 var score = 0;
-
+var speed = 1;
 
 
 
@@ -39,7 +40,7 @@ function gameLoop(time) {
     if (last === undefined) {
         last = time
     }
-    dt = time - last;
+    dt = (time - last).toFixed(2); //2 decimal precision
     last = time
     if(document.hidden){
       window.requestAnimationFrame(gameLoop)
@@ -78,8 +79,10 @@ function gameLoop(time) {
         var xDiff = (nextPipeDistance - 200) / (0 - 200) // scale data [-1,1] aprox., 1 means very close, 0 means very far
         var yDiff = ((nextPipe.topPipeHeight + PIPE_GAP_HEIGHT / 2 - thisBird.y) - canvas.height / 2 / 2) / (0 - canvas.height / 2 / 2) // scale data [0,1] aprox., 1 means very close, 0 means very far
         var yDiff2 = 0
-        var yVel = (thisBird.yVel - 0) / (8 - 0) // 1 is fast down, -1 is fast up
+        var yDiff3 = 1
+        var yVel = (thisBird.yVel - 0) / (400 - 0) // 1 is fast down, -1 is fast up
         if(nextNextPipe) yDiff2 = ((nextNextPipe.topPipeHeight + PIPE_GAP_HEIGHT / 2 - thisBird.y) - canvas.height / 2 / 2) / (0 - canvas.height / 2 / 2)
+        if(thirdNextPipe) yDiff3 = ((thirdNextPipe.topPipeHeight + PIPE_GAP_HEIGHT / 2 - thisBird.y) - canvas.height / 2 / 2) / (0 - canvas.height / 2 / 2)
         if(!thisBird.notNeural){
           thisBird.brain.setNetworkInputs(xDiff, yDiff, yDiff2, yVel)
           var output = thisBird.brain.getNetworkOutputs()
@@ -93,7 +96,7 @@ function gameLoop(time) {
 
     //create new pipes
     if (pipes[pipes.length - 1].x < (canvas.width - SPACE_BETWEEN_PIPES)) {
-        var random = randInRange(100, canvas.height - 300)
+        var random = randInRange(250, canvas.height - 250)
         pipes.push(new Pipe(random, PIPE_GAP_HEIGHT, 800))
     }
 
@@ -114,12 +117,18 @@ function gameLoop(time) {
             smallestDistance = distFromBird
             nextPipe = pipes[i]
             nextNextPipe = pipes[i+1]
+            thirdNextPipe = pipes[i+2]
 
             nextPipeDistance = distFromBird
             if(nextNextPipe){
-              var distFromBird2 = (pipes[i+1].x + Pipe.PIPE_WIDTH) - (canvas.width / 2 - Bird.RADIUS / 2)
+              var distFromBird2 = (nextNextPipe.x + Pipe.PIPE_WIDTH) - (canvas.width / 2 - Bird.RADIUS / 2)
               nextNextPipeDistance = distFromBird2
             }
+            if(thirdNextPipe){
+              var distFromBird2 = (thirdNextPipe.x + Pipe.PIPE_WIDTH) - (canvas.width / 2 - Bird.RADIUS / 2)
+              thirdNextPipeDistance = distFromBird2
+            }
+
         }
 
         if ((pipes[i].x + Pipe.PIPE_WIDTH) < 0) { //remove pipes
@@ -129,12 +138,15 @@ function gameLoop(time) {
         }
     }
     //drawing time
-    nextPipe.setColor("red")
+    nextPipe.setColor("#fc2c21")
     if(nextNextPipe){
-      nextNextPipe.setColor("yellow")
+      nextNextPipe.setColor("#fc574e")
+    }
+    if(thirdNextPipe){
+      thirdNextPipe.setColor("#fa948e")
     }
     for (var i = 0; i < pipes.length; i++) {
-        if (pipes[i] != nextPipe && pipes[i] != nextNextPipe) pipes[i].setColor("black")
+        if (pipes[i] != nextPipe && pipes[i] != nextNextPipe && pipes[i] != thirdNextPipe) pipes[i].setColor("black")
         pipes[i].draw(dt)
     }
     for (bird in flock.birds) {
@@ -204,6 +216,11 @@ function reset() {
 
 
 window.requestAnimationFrame(gameLoop)
+
+document.getElementById("speedSlider").oninput = function(){
+  Flock.STEP_SPEED = this.value
+  document.getElementById("speedLevel").textContent = this.value + "x"
+}
 
 document.getElementById("invisCheck").addEventListener("change", function(e){
   if (event.currentTarget.checked) {

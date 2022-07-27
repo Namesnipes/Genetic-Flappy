@@ -25,7 +25,7 @@ class Pipe{
   }
 
   step(dt){
-    var offset = Pipe.movementSpeed * dt/1000
+    var offset = Pipe.movementSpeed * (dt/1000)*Flock.STEP_SPEED
     this.x -= offset
     this.topRect.setX(this.topRect.x - offset)
     this.botRect.setX(this.botRect.x - offset)
