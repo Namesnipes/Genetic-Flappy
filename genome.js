@@ -5,8 +5,9 @@
 class Genome {
   static MUTATION_RATE = 0.4
   static BRAIN_STRUCTURE = [
-    [1, 1, 1, 1],
     [1, 1, 1, 1, 1],
+    [1, 1, 1, 1],
+    [1, 1, 1, 1],
     [1]
   ]
   constructor(structure) { //[ [1,1], [1,1,1,1], [1,1,1,1], [1]]
@@ -59,6 +60,30 @@ class Genome {
     }
   }
 
+  setBiases(biasArray){
+    for (var layerNum = 0; layerNum < this.genome.length; layerNum++) {
+      for (var nodeNum = 0; nodeNum < this.genome[layerNum].length; nodeNum++) {
+        var bias = biasArray[layerNum][nodeNum]
+        var node = this.genome[layerNum][nodeNum]
+        node.bias = bias
+      }
+    }
+  }
+
+  setWeights(weightArray){
+    for (var layerNum = 0; layerNum < this.genome.length-1; layerNum++) {
+      for (var nodeNum = 0; nodeNum < this.genome[layerNum].length; nodeNum++) {
+        var fromNode = this.genome[layerNum][nodeNum]
+        for (var connectionNum = 0; connectionNum < weightArray[layerNum][nodeNum].length; connectionNum++) {
+          var weight = weightArray[layerNum][nodeNum][connectionNum]
+          var toNode = this.genome[layerNum+1][connectionNum]
+          var connectingNode = new connectionNode(fromNode, toNode, weight)
+          fromNode.addOutConnections(connectingNode)
+          toNode.addInConnections(connectingNode)
+        }
+      }
+    }
+  }
   getNetworkOutputs() { //aka feedforward
     //console.log(this.genome[1][0].connections)
     //console.log(this.genome[1][0].getOutput())

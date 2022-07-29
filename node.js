@@ -46,6 +46,10 @@ class Node{
     this.inConnections = connections
   }
 
+  addInConnections(connections){
+    this.inConnections.push(connections)
+  }
+
   addOutConnections(connections){
     this.outConnections.push(connections)
   }
