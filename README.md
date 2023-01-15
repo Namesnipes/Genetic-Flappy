@@ -2,7 +2,7 @@
 
 Watch as an agent controlled by A.I. learns to play the side-scroller game "Flappy Bird". Play alongside the computer and see how many generations it takes until the A.I. can outperform a human! 
 
-Play the game [here](namesnipes.github.io/genetic-flappy/)!
+Play the game [here](https://namesnipes.github.io/Genetic-Flappy/)!
 
 **This version is a much more difficult version of the original game**. This is in an attempt to push the A.I. to its limits, if you don't want to wait, you can spawn an agent I trained for 100 generations previously.
 
